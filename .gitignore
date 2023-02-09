@@ -3,3 +3,4 @@
 quickstart.txt
 db.sqlite3
 __pycache__
+oauth_creds.txt

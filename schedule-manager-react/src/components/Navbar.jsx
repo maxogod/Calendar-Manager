@@ -1,24 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useGetSession } from '../hooks/useSession'
+import { useDispatch } from 'react-redux'
 import { actions } from '../slices/userSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { setCookie, removeCookie } from '../hooks/useCookies'
 
 function Navbar() {
 
-  const user = useSelector((state) => state.username)
-  const maxo = {username: 'maxo'}
-
   const dispatch = useDispatch()
+  const user = useGetSession(dispatch)
+  const logged = user ? (user.id ? true : false) : false
 
   const handleLogOut = () => {
     dispatch(actions.logout())
-    removeCookie('user')
   }
 
   const handleLogIn = () => {
-    dispatch(actions.login(maxo.username))
-    setCookie('user', maxo.username)
   }
 
   return (
@@ -45,7 +41,7 @@ function Navbar() {
               <Link to='/create-calendar' className="nav-link">New Calendar</Link>
             </li>
             <li className="nav-item dropdown">
-                <a
+                <small
                   style={{cursor: 'pointer'}}
                   className="nav-link dropdown-toggle" id="navbarDropdown"
                   role="button" aria-haspopup="true" aria-expanded="false"
@@ -53,14 +49,14 @@ function Navbar() {
                   data-bs-target="#info"
                 >
                   Info
-                </a>
+                </small>
                 <div className="dropdown-menu" id='info' aria-labelledby="navbarDropdown">
                     <Link to='/help' className="dropdown-item">Help</Link>
                     <Link to='/about' className="dropdown-item">About</Link>
                 </div>
             </li>
             <li className="nav-item dropdown">
-                <a
+                <small
                   style={{cursor: 'pointer'}}
                   className="nav-link dropdown-toggle" id="navbarDropdown"
                   role="button" aria-haspopup="true" aria-expanded="false"
@@ -68,15 +64,16 @@ function Navbar() {
                   data-bs-target="#account"
                 >
                   Account
-                </a>
+                </small>
                 <div className="dropdown-menu" id='account'>
                   {
-                  !user ?
-                   <a className="dropdown-item" onClick={handleLogIn} style={{cursor: 'pointer'}}>Log In</a> 
+                  !logged ?
+                  
+                   <Link to='/login' className="dropdown-item" onClick={handleLogIn} style={{cursor: 'pointer'}}>Log In</Link> 
                    : 
-                   <a className="dropdown-item" onClick={handleLogOut} style={{cursor: 'pointer'}}>Log Out</a>
+                   <small className="dropdown-item" onClick={handleLogOut} style={{cursor: 'pointer'}}>Log Out</small>
                   }
-                    <a className="dropdown-item" style={{cursor: 'pointer'}}>Switch Themes</a>
+                    <small className="dropdown-item" style={{cursor: 'pointer'}}>Switch Themes</small>
                 </div>
             </li>
           </ul>

@@ -15,9 +15,12 @@ export const setCookie = (cookieName, value) => {
         })
 }
 
-export const getCookie = (cookieName) => {
+export const getCookie = (cookieName, decrypt = false) => {
     const cookie = Cookies.get(cookieName)
-    return cookie ? CryptoJS.AES.decrypt(cookie, secret).toString(CryptoJS.enc.Utf8) : null
+    if (decrypt) {
+        return cookie ? CryptoJS.AES.decrypt(cookie, secret).toString(CryptoJS.enc.Utf8) : null
+    }
+    return cookie
 }
 
 export const removeCookie = (cookieName) => {

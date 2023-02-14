@@ -15,12 +15,14 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
+#
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [
                        s.strip() for s in v.split(',')])
 
 
 # Application definition
 
+#
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,8 +37,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+#
 AUTH_USER_MODEL = 'RestApi.User'
 
+#
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,6 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ScheduleManager.urls'
 
+#
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -118,6 +123,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+#
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'schedule-manager-react/build/static')
 ]
@@ -127,9 +133,13 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
+
+#
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

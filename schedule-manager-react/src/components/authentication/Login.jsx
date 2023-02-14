@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { actions } from '../../slices/userSlice'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode'
+import { GoogleLogin } from '@react-oauth/google';
+import { gapi } from 'gapi-script'
 
 function Login() {
 
@@ -43,37 +45,39 @@ function Login() {
 
         <button type="submit">Submit</button>
       </form>
+      <Link to='/signup' className="btn btn-primary">Sign up</Link>
       <GoogleOauth />
     </div>
   )
 }
 
-function GoogleOauth () {
+export function GoogleOauth () {
 
-  const handleCallbackResponse = (response) => {
-    console.log('encoded JWT ID token: ' + response.credential)
-    const user = jwt_decode(response.credential)
-    console.log(user)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleSuccess = credentialResponse => {
+    const data = jwt_decode(credentialResponse.credential)
+    const uid = data.sub
+    dispatch(actions.googleOauth({uid: uid, extra_info: data}))
+    setTimeout(() => {
+      navigate('/')
+    }, 1000)
   }
 
-  useEffect(() => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_CLIENT_ID,
-      callback: handleCallbackResponse
-    })
-
-    google.accounts.id.renderButton(
-      document.getElementById('googleLogIn'),
-      { theme: 'outline'}
-    )
-  }, [])
-
+  const handleError = () => {
+    alert('Failed to log in')
+    setTimeout(() => {
+      navigate('/')
+    }, 1000)
+  }
 
   return (
-    <>
-      <div id='googleLogIn'></div>
-    </>
+  <GoogleLogin
+    onSuccess={handleSuccess}
+    onError={handleError}
+    cookiePolicy={"single_host_policy"}
+  />
   )
 }
 

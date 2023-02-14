@@ -13,13 +13,15 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+
         set: (state, action) => {
             // sets a user as session user without loging in
             state.user = action.payload
         },
+
         login: (state, action) => {
             (async () => {
-                const res = await fetch('http://127.0.0.1:8000/api/session/', {
+                const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/session/', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -32,16 +34,16 @@ const userSlice = createSlice({
                 if (data.success) {
                     alert('Succesfully logged in')
                 } else {
-                    alert('Failed to logged in (wrong information)')
+                    alert('Failed to log in (wrong information)')
                 }
                 // payload: {email: '', password: '',}
                 // res: {success: Bool}
             })()
-            state.user = action.payload
         },
+
         logout: (state, action) => {
             (async () => {
-                await fetch('http://127.0.0.1:8000/api/session/', {
+                await fetch(process.env.REACT_APP_HOST_URL + '/api/session/', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -53,6 +55,46 @@ const userSlice = createSlice({
                 // if backend recieves { email: null } it logs the curr user out
             })()
             state.user = initialState
+        },
+
+        register: (state, action) => {
+            (async () => {
+                const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(action.payload),
+                })
+                const data = await res.json()
+                if (res.status == 201) {
+                    alert('Succesfully signed up')
+                } else {
+                    alert('Failed to sign up')
+                }
+            })()
+        },
+
+        googleOauth: (state, action) => {
+            (async () => {
+                const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/google_oauth/', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(action.payload),
+                })
+                const data = await res.json()
+                if (data.success) {
+                    alert('Succesfully logged in')
+                } else {
+                    alert('Failed to log in')
+                }
+            })()
         }
     }
 })

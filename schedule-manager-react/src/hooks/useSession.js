@@ -6,7 +6,7 @@ import { actions } from '../slices/userSlice'
 export const useGetSession = (dispatch) => {
     useEffect(() => {
         (async () => {
-            const res = await fetch('http://127.0.0.1:8000/api/session/')
+            const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/session/')
             const data = await res.json()
             dispatch(actions.set(data))
         })()

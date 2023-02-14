@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate, login, logout
 
-from .serializers import CreateUserSerializer, UserSerializer
+from .serializers import CreateUserSerializer, UserSerializer, GoogleOauthSerializer
 from .models import User
 
 
@@ -62,4 +62,18 @@ class RegisterView(APIView):
             login(request, user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleOauth(APIView):
+    """
+    API to register/login a user after it is authenticated by google.
+    """
+
+    def post(self, request, format=None):
+        serializer = GoogleOauthSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()  # Create/Get User
+            login(request, user)
+            return Response({'success': True}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

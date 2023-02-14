@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path('session/', views.SessionView.as_view(), name='session'),
     path('register/', views.RegisterView.as_view(), name='register'),
+    path('google_oauth/', views.GoogleOauth.as_view(), name='google_oauth'),
 ]

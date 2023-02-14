@@ -12,6 +12,19 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
+class GoogleUser(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    uid = models.CharField(max_length=200)
+    extra_info = models.JSONField(null=False, blank=False)
+
+    def __str__(self) -> str:
+        return '(Google) ' + self.user.username
+
+
 class Calendar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

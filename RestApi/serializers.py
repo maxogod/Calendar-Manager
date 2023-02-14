@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, CharField
-from RestApi.models import User
+from RestApi.models import User, GoogleUser
 
 
 class CreateUserSerializer(ModelSerializer):
@@ -51,3 +51,39 @@ class UserSerializer(ModelSerializer):
             'password': {'write_only': True},
             'username': {'required': False}
         }
+
+
+class GoogleOauthSerializer(ModelSerializer):
+    class Meta:
+        model = GoogleUser
+        fields = [
+            'uid',
+            'extra_info',
+        ]
+        extra_kwargs = {
+            'uid': {'write_only': True, 'required': True},
+            'extra_info': {'write_only': True, 'required': True},
+        }
+
+    def save(self):
+        email = self.validated_data['extra_info']['email']
+        try:
+            existing_user = User.objects.get(email=email)
+            existing_user.avatar = self.validated_data['extra_info']['picture']
+            existing_user.username = self.validated_data['extra_info']['name']
+            return existing_user
+        except:
+            pass
+        user = User(
+            username=self.validated_data['extra_info']['name'],
+            email=email,
+            avatar=self.validated_data['extra_info']['picture'],
+        )
+        google_user = GoogleUser(
+            user=user,
+            uid=self.validated_data['uid'],
+            extra_info=self.validated_data['extra_info'],
+        )
+        user.save()
+        google_user.save()
+        return user

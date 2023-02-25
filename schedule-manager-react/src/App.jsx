@@ -5,8 +5,9 @@ import About from './components/page-info/About'
 import Help from './components/page-info/Help'
 import Login from './components/authentication/Login'
 import Signup from './components/authentication/Signup'
-import Calendars from './components/calendars/Calendars'
-import CreateCalendar from './components/calendars/CreateCalendar'
+import Schedules from './components/schedules/Schedules'
+import CreateSchedule from './components/schedules/CreateSchedule'
+import Schedule from './components/schedules/Schedule'
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -19,8 +20,8 @@ function App() {
         <Route path='/help' element={<Help />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/calendars' element={<Calendars />} />
-        <Route path='/create-calendar' element={<CreateCalendar />} />
+        <Route path='/calendars' element={<Schedules />} />
+        <Route path='/create-calendar' element={<CreateSchedule />} />
       </Routes>
     </>
   );

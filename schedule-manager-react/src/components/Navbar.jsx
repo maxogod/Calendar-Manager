@@ -14,9 +14,6 @@ function Navbar() {
     dispatch(actions.logout())
   }
 
-  const handleLogIn = () => {
-  }
-
   return (
     <div className="navbar navbar-expand-xl navbar-light bg-light">
       <div className="container">
@@ -69,7 +66,7 @@ function Navbar() {
                   {
                   !logged ?
                   
-                   <Link to='/login' className="dropdown-item" onClick={handleLogIn} style={{cursor: 'pointer'}}>Log In</Link> 
+                   <Link to='/login' className="dropdown-item" style={{cursor: 'pointer'}}>Log In</Link> 
                    : 
                    <small className="dropdown-item" onClick={handleLogOut} style={{cursor: 'pointer'}}>Log Out</small>
                   }

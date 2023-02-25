@@ -68,8 +68,8 @@ const userSlice = createSlice({
                     },
                     body: JSON.stringify(action.payload),
                 })
-                const data = await res.json()
-                if (res.status == 201) {
+                // const data = await res.json()
+                if (res.status === 201) {
                     alert('Succesfully signed up')
                 } else {
                     alert('Failed to sign up')

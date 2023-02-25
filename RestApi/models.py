@@ -25,10 +25,16 @@ class GoogleUser(models.Model):
         return '(Google) ' + self.user.username
 
 
-class Calendar(models.Model):
+class Routine(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     name = models.CharField(max_length=200)
+
+    sleep_schedule = models.CharField(max_length=200, null=False, blank=False)
+    unavailability = models.JSONField(null=True, blank=False)
+    # unavailability is a list w/ (timestart, timeend) [[x, y], [i. k]]
+    sleep_time = models.IntegerField(null=False, blank=False)
+    bed_time = models.IntegerField(null=False, blank=False)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -37,12 +43,17 @@ class Calendar(models.Model):
         return self.name
 
 
-class Event(models.Model):
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+class Task(models.Model):
+    routine = models.ForeignKey(Routine, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200)
-    description = models.TextField()
-    date = models.DateField()
+    description = models.TextField(null=True, blank=True)
+
+    days_a_week = models.IntegerField(null=True, blank=False)
+    importance = models.IntegerField(null=False, blank=False)
+
+    starttime = models.DateTimeField(null=True)
+    endtime = models.DateTimeField(null=True)
 
     def __str__(self) -> str:
         return self.title

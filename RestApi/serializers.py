@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer, CharField
-from RestApi.models import User, GoogleUser
+from RestApi.models import User, GoogleUser, Routine, Task
+from .routine_manager import RoutineManager
 
 
 class CreateUserSerializer(ModelSerializer):
@@ -87,3 +88,74 @@ class GoogleOauthSerializer(ModelSerializer):
         user.save()
         google_user.save()
         return user
+
+
+class RoutineSerializer(ModelSerializer):
+    """
+    routine object that we get from frontend ->
+    {
+        name: '',
+        sleep_schedule: 'NIGHT/DAY',
+        unavailability: null/[[x, y], [i, k]],
+        sleep_time: number,
+        bed_time: number,
+
+        tasks: [
+            {
+                title: '',
+                description: '',
+                days_a_week: number,
+                starttime: number/null,
+                endtime: number/null,
+                importance: number,
+            },
+            {
+                title: '',
+                description: '',
+                days_a_week: number,
+                starttime: number/null,
+                endtime: number/null,
+                importance: number,
+            }
+        ]
+    }
+
+    ----
+
+    RoutineManager algorithm will take care of the oranization of tasks by dates
+    and this serializer will create the routine on save
+    """
+    class Meta:
+        model = Routine
+
+        fields = [
+            'id',
+            'name',
+            'sleep_schedule',
+            'unavailability',
+            'sleep_time',
+            'bed_time',
+        ]
+
+    def save(self, user, tasks):
+        routine = Routine(
+            user=user,
+            name=self.validated_data['name'],
+            sleep_schedule=self.validated_data['sleep_schedule'],
+            unavailability=self.validated_data['unavailability'],
+            sleep_time=self.validated_data['sleep_time'],
+            bed_time=self.validated_data['bed_time'],
+        )
+        manager = RoutineManager(routine, tasks)
+        processed_tasks = manager.process()
+        for task in processed_tasks:
+            Task(
+                routine=routine,
+                title=task['title'],
+                description=task['description'],
+                days_a_week=task['days_a_week'],
+                importance=task['importance'],
+                starttime=task['starttime'],
+                endtime=task['endtime'],
+            )
+        return routine

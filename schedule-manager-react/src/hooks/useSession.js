@@ -8,9 +8,10 @@ export const useGetSession = (dispatch) => {
         (async () => {
             const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/session/')
             const data = await res.json()
-            dispatch(actions.set(data))
+            dispatch(actions.set(data.user))
+            dispatch(actions.setSchedules(data.schedules))
         })()
     }, [dispatch])
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user).user
     return user
 }

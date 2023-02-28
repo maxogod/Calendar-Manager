@@ -11,48 +11,34 @@ const scheduleSlice = createSlice({
     initialState,
     reducers: {
         setSchedule: (state, action) => {
-            state.schedule = action.payload
+            state.scheduleOptions = action.payload.scheduleOptions
+            state.taskList = action.payload.taskList
         },
-        saveSchedule: (state, action) => {
+        saveSchedule: (state) => {
             (async () => {
-                const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/session/', {
+                const res = await fetch(process.env.REACT_APP_HOST_URL + '/api/routine/create/', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'X-CSRFToken': getCookie('csrftoken')
                     },
-                    body: JSON.stringify(action.payload),
+                    body: JSON.stringify(
+                        {
+                            name: state.scheduleOptions.name,
+                            sleep_schedule: state.scheduleOptions.sleep_schedule,
+                            sleep_time: Number(state.scheduleOptions.sleep_time),
+                            bed_time: state.scheduleOptions.bed_time,
+                            tasks: state.taskList
+                        }
+                    ),
                 })
+                if (res.status === 201) {
+                    alert('Routine was successfully created!')
+                } else {
+                    alert('There was an error in the creation of this routine..')
+                }
             })()
-            /* 
-            {
-                name: '',
-                sleep_schedule: 'NIGHT/DAY',
-                unavailability: null/[[x, y], [i, k]],
-                sleep_time: number,
-                bed_time: number,
-
-                tasks: [
-                    {
-                        title: '',
-                        description: '',
-                        days_a_week: number,
-                        starttime: number/null,
-                        endtime: number/null,
-                        importance: number,
-                    },
-                    {
-                        title: '',
-                        description: '',
-                        days_a_week: number,
-                        starttime: number/null,
-                        endtime: number/null,
-                        importance: number,
-                    }
-                ]
-            }
-            */
         },
     }
 })

@@ -3,10 +3,19 @@ import { getCookie } from '../utils/utilsCookies'
 
 
 const initialState = {
-    "id": null,
-    "email": null,
-    "username": null,
-    "avatar": null
+    user: {
+        "id": null,
+        "email": null,
+        "username": null,
+        "avatar": null
+    },
+    schedules: {
+        "id": null,
+        "name": null,
+        "sleep_schedule": null,
+        "sleep_time": null,
+        "bed_time": null,
+    },
 }
 
 const userSlice = createSlice({
@@ -17,6 +26,10 @@ const userSlice = createSlice({
         set: (state, action) => {
             // sets a user as session user without loging in
             state.user = action.payload
+        },
+
+        setSchedules: (state, action) => {
+            state.schedules = action.payload
         },
 
         login: (state, action) => {

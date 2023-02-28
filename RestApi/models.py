@@ -34,7 +34,7 @@ class Routine(models.Model):
     unavailability = models.JSONField(null=True, blank=False)
     # unavailability is a list w/ (timestart, timeend) [[x, y], [i. k]]
     sleep_time = models.IntegerField(null=False, blank=False)
-    bed_time = models.IntegerField(null=False, blank=False)
+    bed_time = models.TimeField(null=False, blank=False)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -52,8 +52,9 @@ class Task(models.Model):
     days_a_week = models.IntegerField(null=True, blank=False)
     importance = models.IntegerField(null=False, blank=False)
 
-    starttime = models.DateTimeField(null=True)
-    endtime = models.DateTimeField(null=True)
+    days = models.JSONField(null=True, blank=False)
+    starttime = models.TimeField(null=True)
+    endtime = models.TimeField(null=True)
 
     def __str__(self) -> str:
         return self.title

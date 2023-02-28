@@ -8,7 +8,7 @@ from . import serializers
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
-from .models import User, Routine
+from .models import User, Routine, Task
 
 
 # User Auth
@@ -21,11 +21,19 @@ class SessionView(APIView):
     def get(self, request, format=None):
         try:
             user = User.objects.get(id=request.user.id)
+            routines = Routine.objects.filter(user=user)
         except:
-            user = {'id': None, 'username': None, 'email': None, }
+            user = {
+                "id": None,
+                "email": None,
+                "username": None,
+                "avatar": None,
+            }
+            routines = []
 
         serializer = serializers.UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        routineSerializer = serializers.RoutineSerializer(routines, many=True)
+        return Response({'user': serializer.data, 'schedules': routineSerializer.data}, status=status.HTTP_200_OK)
 
     # Update current session (Login/Logout)
     def post(self, request, format=None):
@@ -88,8 +96,10 @@ class RoutineGet(APIView):
 
     def get(self, request, pk, format=None):
         routine = Routine.objects.get(id=pk)
-        serializer = serializers.RoutineSerializer()
-        return Response(status=status.HTTP_200_OK)
+        tasks = Task.objects.filter(routine=routine)
+        serializer = serializers.RoutineSerializer(routine)
+        task_serializer = serializers.TaskSerializer(tasks, many=True)
+        return Response({'routine': serializer.data, 'tasks': task_serializer.data}, status=status.HTTP_200_OK)
 
 
 class RoutineCreate(APIView):

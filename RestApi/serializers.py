@@ -132,7 +132,6 @@ class RoutineSerializer(ModelSerializer):
             'id',
             'name',
             'sleep_schedule',
-            'unavailability',
             'sleep_time',
             'bed_time',
         ]
@@ -142,20 +141,37 @@ class RoutineSerializer(ModelSerializer):
             user=user,
             name=self.validated_data['name'],
             sleep_schedule=self.validated_data['sleep_schedule'],
-            unavailability=self.validated_data['unavailability'],
             sleep_time=self.validated_data['sleep_time'],
             bed_time=self.validated_data['bed_time'],
         )
+        routine.save()
         manager = RoutineManager(routine, tasks)
         processed_tasks = manager.process()
         for task in processed_tasks:
-            Task(
+            new_task = Task(
                 routine=routine,
                 title=task['title'],
                 description=task['description'],
                 days_a_week=task['days_a_week'],
                 importance=task['importance'],
+                days=task['days'],
                 starttime=task['starttime'],
                 endtime=task['endtime'],
             )
+            new_task.save()
         return routine
+
+
+class TaskSerializer(ModelSerializer):
+    class Meta:
+        model = Task
+
+        fields = [
+            'id',
+            'title',
+            'description',
+            'days',
+            'starttime',
+            'endtime',
+            'importance',
+        ]

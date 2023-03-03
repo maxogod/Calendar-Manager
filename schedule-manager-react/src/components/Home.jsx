@@ -8,6 +8,13 @@ function Home() {
   const dispatch = useDispatch()
   const user = useGetSession(dispatch)
 
+  let num = Math.floor(Math.random() * (18 - 1) + 1)
+  if (num < 10) {
+    num = `0${num}`
+  } else {
+    num = `${num}`
+  }
+
   return (
     <div className='home container col-2'>
       {user.avatar ?
@@ -15,7 +22,7 @@ function Home() {
     :
     <img
     className='pfp'
-    src={`https://api.dicebear.com/5.x/lorelei-neutral/svg?mouth=happy06,happy07,happy03`}
+    src={`https://api.dicebear.com/5.x/lorelei-neutral/svg?mouth=happy${num},happy07,happy03`}
     alt="avatar"
     />}
       <h1>Hey {user.username ? `${user.username}` : `There`}!</h1>

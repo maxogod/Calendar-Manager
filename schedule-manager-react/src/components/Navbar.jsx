@@ -17,7 +17,7 @@ function Navbar() {
   return (
     <div className="navbar navbar-expand-xl navbar-light bg-light">
       <div className="container">
-        <Link to='/' className="navbar-brand col-8">Calendar Manager</Link>
+        <Link to='/' className="navbar-brand">Routine Manager<i class="bi bi-wind"></i></Link>
         <button
           className="navbar-toggler"
           data-bs-toggle="collapse"
@@ -29,13 +29,13 @@ function Navbar() {
         <div className="collapse navbar-collapse col" id="nav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to='/' className="nav-link active">Home</Link>
+              <Link to='/' className="nav-link">Home</Link>
             </li>
             <li className="nav-item">
-              <Link to='/calendars' className="nav-link">My Calendars</Link>
+              <Link to='/routines' className="nav-link">My Routines</Link>
             </li>
             <li className="nav-item">
-              <Link to='/create-calendar' className="nav-link">New Calendar</Link>
+              <Link to='/create-routine' className="nav-link">New Routine</Link>
             </li>
             <li className="nav-item dropdown">
                 <small
@@ -70,7 +70,6 @@ function Navbar() {
                    : 
                    <small className="dropdown-item" onClick={handleLogOut} style={{cursor: 'pointer'}}>Log Out</small>
                   }
-                    <small className="dropdown-item" style={{cursor: 'pointer'}}>Switch Themes</small>
                 </div>
             </li>
           </ul>

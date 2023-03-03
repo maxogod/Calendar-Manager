@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useGetSession } from '../hooks/useSession'
+import { Link, useNavigate } from 'react-router-dom';
 
 function Home() {
 
@@ -8,8 +9,19 @@ function Home() {
   const user = useGetSession(dispatch)
 
   return (
-    <div className='home' style={{background: '#BFD6E6', width: '100%', height: '92.5vh'}}>
-      <h1>Hey {user ? `${user.username}` : `null`}</h1>
+    <div className='home container col-2'>
+      {user.avatar ?
+      <img className='pfp' src={user.avatar} alt="Profile Pic" />
+    :
+    <img
+    className='pfp'
+    src={`https://api.dicebear.com/5.x/lorelei-neutral/svg?mouth=happy06,happy07,happy03`}
+    alt="avatar"
+    />}
+      <h1>Hey {user.username ? `${user.username}` : `There`}!</h1>
+      {!user.username && <Link to={'/signup'} className='btn home-button get-started'>Get Started!</Link>}
+      <Link to={'/routines'} className='btn home-button'>See Routines</Link>
+      <Link to={'/create-routine'} className='btn home-button'>Create Routine</Link>
     </div>
   )
 }

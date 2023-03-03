@@ -40,6 +40,23 @@ const scheduleSlice = createSlice({
                 }
             })()
         },
+        deleteRoutine: (state, action) => {
+            (async () => {
+                const res = await fetch(process.env.REACT_APP_HOST_URL + `/api/routine/${action.payload}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                if (res.status !== 200) {
+                    alert('There was an error trying to delete the routine..')
+                }
+            })()
+            state.scheduleOptions = {}
+            state.taskList = []
+        }
     }
 })
 

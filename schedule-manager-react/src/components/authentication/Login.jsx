@@ -33,20 +33,23 @@ function Login() {
   }
 
   return (
-    <div className='home' style={{background: '#BFD6E6', width: '100%', height: '92.5vh'}}>
+    <div className='home container'>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
-          <input id='email' name='email' type="text" value={user.email} onChange={handleChange} placeholder='E.g. person@email.com' required />
-        </label>
-        <label htmlFor="password">
-          <input id='password' name='password' type="password" value={user.password} onChange={handleChange} placeholder='********' required/>
-        </label>
 
-        <button type="submit">Submit</button>
-      </form>
-      <Link to='/signup' className="btn btn-primary">Sign up</Link>
-      <GoogleOauth />
+      <div className='login-wrap col-4'>
+        <form onSubmit={handleSubmit} className='form-wrap'>
+          <label htmlFor="email">
+            <input id='email' name='email' type="text" value={user.email} onChange={handleChange} placeholder='Email' required />
+          </label>
+          <label htmlFor="password">
+            <input id='password' name='password' type="password" value={user.password} onChange={handleChange} placeholder='********' required/>
+          </label>
+
+          <button type="submit" className='btn schedule-button'>Log In</button>
+        </form>
+        <Link to='/signup' className="btn submit">Sign up</Link>
+        <GoogleOauth />
+      </div>
     </div>
   )
 }

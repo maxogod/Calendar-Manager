@@ -8,6 +8,7 @@ import Signup from './components/authentication/Signup'
 import Schedules from './components/schedules/Schedules'
 import CreateSchedule from './components/schedules/CreateSchedule'
 import Schedule from './components/schedules/Schedule'
+import NotFound from './components/page-info/NotFound'
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -20,8 +21,10 @@ function App() {
         <Route path='/help' element={<Help />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/calendars' element={<Schedules />} />
-        <Route path='/create-calendar' element={<CreateSchedule />} />
+        <Route path='/routines' element={<Schedules />} />
+        <Route path='/create-routine' element={<CreateSchedule />} />
+        <Route path='/routine/:id' element={<Schedule />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   );

@@ -1,6 +1,6 @@
 import { scheduleQuestions, taskQuestions } from '../../utils/questions'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { actions } from '../../slices/scheduleSlice'
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ function CreateSchedule() {
   const [taskList, setTaskList] = useState([])
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const user = useSelector((state) => state.user).user
   
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -27,16 +28,13 @@ function CreateSchedule() {
       || !scheduleOptions.bed_time) {
         alert("You didn't fill the information correctly")
         return
-      }
-    if (scheduleOptions.sleep_time < 6 || scheduleOptions.sleep_time > 9 ) {
-      alert('sleep time must be between 6 and 9 hours')
-      return
     }
 
-    if (!taskList) {
+    if (taskList.length === 0) {
       alert('You must add at least 1 task!')
       return
     }
+
 
     dispatch(actions.setSchedule({ scheduleOptions, taskList }))
     dispatch(actions.saveSchedule())
@@ -47,13 +45,27 @@ function CreateSchedule() {
 
   }
 
+  const handleSignIn = () => {
+    setTimeout(() => {
+      navigate('/login')
+    }, 100);
+  }
+
   return (
-    <div className='card'>
-      <form onSubmit={handleSubmit}>
+    <div className='card col-5 container' style={{marginTop: '5%'}}>
+      {!user.username ?
+      <>
+      <button className='btn' onClick={handleSignIn}>Sign In<br/><small>to create routines</small></button>
+      </>
+    :
+    <>
+      <form onSubmit={handleSubmit} className='schedule-form'>
         {!scheduleOptionsFilled && <ScheduleQuestions scheduleOptions={scheduleOptions} setScheduleOptions={setScheduleOptions} filled={setScheduleOptionsFilled} />}
         {scheduleOptionsFilled && <TaskQuestions taskList={taskList} setTaskList={setTaskList} />}
-        <button className='btn btn-primary' type='submit'>Submit</button>
+        <button className='btn submit' type='submit'>Submit</button>
       </form>
+    </>  
+    }
     </div>
   )
 }
@@ -73,6 +85,12 @@ function ScheduleQuestions({ scheduleOptions, setScheduleOptions, filled }) {
       return
     }
 
+    if (scheduleOptions.sleep_schedule != 'NIGHT'
+    && scheduleOptions.sleep_schedule != 'MORNING') {
+      alert('You must chose between NIGHT / MORNING!')
+      return
+    }
+
     filled(true)
     e.preventDefault()
   }
@@ -88,13 +106,15 @@ function ScheduleQuestions({ scheduleOptions, setScheduleOptions, filled }) {
     <h3>Schedule questions</h3>
     {Object.keys(scheduleQuestions).map((key, index) => {
       return (
-        <label key={index} htmlFor={key}>
-          <small className='question'>{scheduleQuestions[key].question}</small>
-          <input id={key} name={key} type={scheduleQuestions[key].type} onChange={handleChange} placeholder={scheduleQuestions[key].placeholder} />
-        </label>
+        <>
+          <label key={index} htmlFor={key}>
+            <small className='question'>{scheduleQuestions[key].question}</small>
+          </label>
+          <input className='question' id={key} name={key} type={scheduleQuestions[key].type} onChange={handleChange} placeholder={scheduleQuestions[key].placeholder} />
+        </>
       )
     })}
-    <button className='btn btn-primary' onClick={handleFill}>Next</button>
+    <button className='btn schedule-button' onClick={handleFill}>Next</button>
     </>
   )
 }
@@ -112,15 +132,17 @@ function TaskQuestions({ taskList, setTaskList }) {
   const [task, setTask] = useState(taskDefault)
 
   const handleAddTask = (e) => {
-    if (!task.title 
-      || !task.description
+    if (!task.title
       || !task.days_a_week
-      || !task.importance) {
+      || task.importance === '') {
         alert('You must fill in the required information first!')
         return
       }
-    if (task.days_a_week > 7) {
-      alert("A week doesn't have more than 7 days!")
+    if (task.days_a_week > 7
+      || task.days_a_week < 0
+      || task.importance > 5
+      || task.importance < 0) {
+      alert("Some information is wrong, try again!")
     }
     
     const newList = [...taskList, task]
@@ -143,14 +165,16 @@ function TaskQuestions({ taskList, setTaskList }) {
     <h3>Task questions</h3>
     {Object.keys(taskQuestions).map((key, index) => {
       return (
-        <label key={index} htmlFor={key}>
-          <small className='question'>{taskQuestions[key].question}</small>
-          <input id={key} name={key} type={taskQuestions[key].type} onChange={handleChange} value={task[key]} placeholder={taskQuestions[key].placeholder} />
-        </label>
+        <>
+          <label className='taskLabel' key={index} htmlFor={key}>
+            <small>{taskQuestions[key].question}</small>
+          </label>
+          <input className='question' id={key} name={key} type={taskQuestions[key].type} onChange={handleChange} value={task[key]} placeholder={taskQuestions[key].placeholder} />
+        </>
       )
     })}
     {/* Previous button */}
-    <button className='btn btn-primary' onClick={handleAddTask}>Add</button>
+    <button className='btn schedule-button' onClick={handleAddTask}>Add</button>
     </>
   )
 }

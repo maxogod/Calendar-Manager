@@ -9,6 +9,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Research proxy url (port 8000)
 
+// ATENTION! CALENDAR == SCHEDULE == ROUTINE
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

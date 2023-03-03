@@ -9,13 +9,7 @@ const initialState = {
         "username": null,
         "avatar": null
     },
-    schedules: {
-        "id": null,
-        "name": null,
-        "sleep_schedule": null,
-        "sleep_time": null,
-        "bed_time": null,
-    },
+    schedules: [],
 }
 
 const userSlice = createSlice({

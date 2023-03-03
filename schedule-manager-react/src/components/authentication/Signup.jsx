@@ -33,24 +33,26 @@ function Signup() {
   }
 
   return (
-    <div>
+    <div className='home container'>
       <h1>Signup</h1>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">
-          <input id='username' name='username' type="text" value={user.username} onChange={handleChange} placeholder='E.g. CatLover123' required />
-        </label>
-        <label htmlFor="email">
-          <input id='email' name='email' type="text" value={user.email} onChange={handleChange} placeholder='E.g. person@email.com' required />
-        </label>
-        <label htmlFor="password">
-          <input id='password' name='password' type="password" value={user.password} onChange={handleChange} placeholder='********' required/>
-        </label>
+      <div className='login-wrap col-4'>
+        <form onSubmit={handleSubmit} className='form-wrap'>
+          <label htmlFor="username">
+            <input id='username' name='username' type="text" value={user.username} onChange={handleChange} placeholder='Name' required />
+          </label>
+          <label htmlFor="email">
+            <input id='email' name='email' type="text" value={user.email} onChange={handleChange} placeholder='Email' required />
+          </label>
+          <label htmlFor="password">
+            <input id='password' name='password' type="password" value={user.password} onChange={handleChange} placeholder='********' required/>
+          </label>
 
-        <button type="submit">Submit</button>
-      </form>
-      <Link to='/login' className="btn btn-primary">Log in</Link>
-      <GoogleOauth />
+          <button type="submit" className="btn submit">Sign Up</button>
+        </form>
+        <Link to='/login' className='btn schedule-button'>Log in</Link>
+        <GoogleOauth />
+      </div>
     </div>
   )
 }

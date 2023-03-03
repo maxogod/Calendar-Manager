@@ -4,11 +4,11 @@
 
 ![info](./readme_media/howto.png)
 
-<a href='https://www.youtube.com/watch?v=hAaZC-RAX24'><h2>See a <strong>short</strong> video of it<h2></a>
+## See a <strong>short</strong> video of it -> <https://www.youtube.com/watch?v=hAaZC-RAX24>
 
 ## Home Page
 
-<iframe src="https://giphy.com/embed/KEaCB7xlkaY3DyIPA8" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+![home](./readme_media/home.png)
 
 ## Routine list
 

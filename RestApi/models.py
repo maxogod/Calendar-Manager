@@ -35,6 +35,7 @@ class Routine(models.Model):
     # unavailability is a list w/ (timestart, timeend) [[x, y], [i. k]]
     sleep_time = models.IntegerField(null=False, blank=False)
     bed_time = models.TimeField(null=False, blank=False)
+    task_count = models.IntegerField(null=True, blank=False)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

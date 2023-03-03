@@ -95,11 +95,28 @@ class GoogleOauth(APIView):
 class RoutineGet(APIView):
 
     def get(self, request, pk, format=None):
-        routine = Routine.objects.get(id=pk)
+        try:
+            routine = Routine.objects.get(id=pk)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if routine is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        elif routine.user != request.user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         tasks = Task.objects.filter(routine=routine)
         serializer = serializers.RoutineSerializer(routine)
         task_serializer = serializers.TaskSerializer(tasks, many=True)
-        return Response({'routine': serializer.data, 'tasks': task_serializer.data}, status=status.HTTP_200_OK)
+        return Response({'scheduleOptions': serializer.data, 'taskList': task_serializer.data}, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        try:
+            routine = Routine.objects.get(id=pk)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if (routine.user == request.user):
+            routine.delete()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RoutineCreate(APIView):

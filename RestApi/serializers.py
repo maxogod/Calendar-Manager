@@ -134,6 +134,7 @@ class RoutineSerializer(ModelSerializer):
             'sleep_schedule',
             'sleep_time',
             'bed_time',
+            'task_count',
         ]
 
     def save(self, user, tasks):
@@ -143,6 +144,7 @@ class RoutineSerializer(ModelSerializer):
             sleep_schedule=self.validated_data['sleep_schedule'],
             sleep_time=self.validated_data['sleep_time'],
             bed_time=self.validated_data['bed_time'],
+            task_count=len(tasks),
         )
         routine.save()
         manager = RoutineManager(routine, tasks)

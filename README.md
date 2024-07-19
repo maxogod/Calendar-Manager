@@ -4,7 +4,7 @@
 
 ![info](./readme_media/howto.png)
 
-## See a <strong>short</strong> video of it -> <https://www.youtube.com/watch?v=hAaZC-RAX24>
+## See a <strong>short</strong> ![video](https://www.youtube.com/watch?v=hAaZC-RAX24) of it!
 
 ## Home Page
 
